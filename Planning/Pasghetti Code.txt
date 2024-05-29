@@ -1,0 +1,57 @@
+Numba 1
+
+- Grid is 10 by 20
+
+Tetrominos (7 total) (Each piece has id/type)
+- 1 x 4 blue bar
+- Left L
+- Right L
+- 2 x 2 Square
+- T Piece
+- Left Shuffle Piece
+- Right Shuffle Piece
+
+Points
+
+Level
+
+Next piece
+
+
+NUMBA 2
+
+2d array of whether or not a sqaure on the grid is occupied
+
+Classes:
+
+Piece {
+  piece type
+  colour
+  rotation
+}
+
+Square {
+  // each individual square on the grid
+  is it occupied?
+  colour
+}
+
+Function:
+
+points() {
+    temp lines
+
+    remove from array, refresh screen
+
+    give points, depending on how many lines scored
+  // 1 line = 40
+  // 2 lines = 100
+  // 3 lines = 300
+  // 4 lines = 1200
+}
+
+
+next_piece() {
+  random number generator
+  each piece has an equal number of chance
+}

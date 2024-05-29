@@ -8,29 +8,46 @@
 
 'use strict';
 
+// ----------VARS (Not the place)-------------------------------------------------------------------------
 
-// let c = document.getElementById('myCanvas');
-// let canvas = c.getContext("2d");
+let cvs;
+let grid = [];
 
-// // canvas.moveTo(0, 0);
-// // canvas.lineTo(200, 0);
-// // canvas.stroke();
+// colours
+let grey = [128, 128, 128];
+let black = [0, 0, 0];
 
-//  canvas.fillStyle = "#000";
+// ----------Classes--------------------------------------------------------------------------------------
 
-// for(let i = 0; i != 20; i++) {
-// for (let x = 0; x != 8; x++) {
-//     canvas.strokeRect(x * 500/ 8 ,i * 750/20,500/8, 500/8)
-//   }
-// }
+class Square {
+  occupied = false;
+  colour;
+
+  constructor(colour) {
+    this.colour = colour;
+  }
+}
+
+
+
+// ----------Functions -----------------------------------------------------------------------------------
 
 function setup() {
-  createCanvas(100, 100, 'myCanvas');
+  cvs = createCanvas(1000, 2000);
 
-  background(200);
+  // grid array
+  for(let y = 0; y < 20; y++) {
+    grid[y] = [];
+    for (let x = 0; x < 10; x++) {
+      if ((x + y) % 2 == 0) {
+        grid[y].push(new Square(grey));
+      } else {
+        grid[y].push(new Square(black));
+      }
+    }
+  }
 
-  // Draw a diagonal line.
-  line(0, 0, 10, 10);
-
-  describe('A diagonal line drawn from top-left to bottom');
+  // HTML Grid
+  
 }
+
