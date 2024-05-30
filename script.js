@@ -7,6 +7,13 @@
  */
 
 'use strict';
+// ---------- Event Listeners-----------------------------------------------------------------------------
+
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') snart()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') alert("ok")});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') alert("ok")});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') alert("ok")});
+document.addEventListener('keydown', event => {if (event.key == ' ') alert("ok")});
 
 // ----------VARS (Not the place)-------------------------------------------------------------------------
 
@@ -18,6 +25,7 @@ let grid = [];
 // colours
 let grey = [245, 245, 245];
 let black = [235, 235, 235];
+let yellow = [255 ,255, 0];
 
 // ----------Classes--------------------------------------------------------------------------------------
 
@@ -28,14 +36,30 @@ class Square {
   constructor(colour) {
     this.colour = colour;
   }
+
+  changeColour(colour) {
+    this.colour = colour;
+  }
 }
 
 class Shapes {
   colour;
+  bottom;
 }
 
-class cube extends Shapes {
+class Cube extends Shapes {
+  sq1 = [0, 4];
+  sq2 = [0, 5];
+  sq3 = [1, 4];
+  sq4 = [1, 5];
 
+  appear() {
+    console.log(grid[this.sq1[0]][this.sq1[1]]);
+    grid[this.sq1[0]][this.sq1[1]].changeColour(yellow);
+    grid[this.sq2[0]][this.sq2[1]].changeColour(yellow);
+    grid[this.sq3[0]][this.sq3[1]].changeColour(yellow);
+    grid[this.sq4[0]][this.sq4[1]].changeColour(yellow);
+  }
 }
 
 // ----------Functions -----------------------------------------------------------------------------------
@@ -55,7 +79,6 @@ function setup() {
       }
     }
   }
-  grid[0][0].colour = [255, 0, 0]
 }
 
 function draw() {
@@ -76,4 +99,16 @@ function draw_grid(cvs_x, cvs_y) {
   }
 }
 
+function snart() {
+  let a = new Cube();
+  a.appear();
+}
 
+function wait() {
+  setTimeout(move, 5000);
+  console.log('done');
+}
+
+function move() {
+  console.log('start');
+}
