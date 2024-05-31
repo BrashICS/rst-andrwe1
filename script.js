@@ -10,7 +10,7 @@
 // ---------- Event Listeners-----------------------------------------------------------------------------
 
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') snart()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') alert("ok")});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') move()});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') alert("ok")});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') alert("ok")});
 document.addEventListener('keydown', event => {if (event.key == ' ') alert("ok")});
@@ -21,6 +21,7 @@ let cvs;
 let cvs_x = 400;
 let cvs_y = 800;
 let grid = [];
+let temp
 
 // colours
 let grey = [245, 245, 245];
@@ -32,9 +33,11 @@ let yellow = [255 ,255, 0];
 class Square {
   occupied = false;
   colour = [255, 0, 0];
+  original;
 
   constructor(colour) {
     this.colour = colour;
+    this.original = colour;
   }
 
   changeColour(colour) {
@@ -54,13 +57,27 @@ class Cube extends Shapes {
   sq4 = [1, 5];
 
   appear() {
-    console.log(grid[this.sq1[0]][this.sq1[1]]);
     grid[this.sq1[0]][this.sq1[1]].changeColour(yellow);
     grid[this.sq2[0]][this.sq2[1]].changeColour(yellow);
     grid[this.sq3[0]][this.sq3[1]].changeColour(yellow);
     grid[this.sq4[0]][this.sq4[1]].changeColour(yellow);
   }
+
+  down() {
+    grid[this.sq1[0]][this.sq1[1]].changeColour(grid[this.sq1[0]][this.sq1[1]].original);
+    grid[this.sq2[0]][this.sq2[1]].changeColour(grid[this.sq2[0]][this.sq2[1]].original);
+    grid[this.sq3[0]][this.sq3[1]].changeColour(grid[this.sq3[0]][this.sq3[1]].original);
+    grid[this.sq4[0]][this.sq4[1]].changeColour(grid[this.sq4[0]][this.sq4[1]].original);
+
+    this.sq1[0] += 1;
+    this.sq2[0] += 1;
+    this.sq3[0] += 1;
+    this.sq4[0] += 1;
+
+  this.appear();
+  }
 }
+
 
 // ----------Functions -----------------------------------------------------------------------------------
 
@@ -102,13 +119,21 @@ function draw_grid(cvs_x, cvs_y) {
 function snart() {
   let a = new Cube();
   a.appear();
-}
-
-function wait() {
-  setTimeout(move, 5000);
-  console.log('done');
+  temp = a;
 }
 
 function move() {
-  console.log('start');
+  wait();
+}
+
+function wait() {
+  setTimeout(finish, 300)
+}
+
+function finish() {
+  console.log('finish');
+  temp.down();
+
+  if(temp.sq3[1] == 19) return;
+  move()
 }
