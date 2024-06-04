@@ -10,9 +10,9 @@
 // ---------- Event Listeners-----------------------------------------------------------------------------
 
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') snart()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') move()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') alert("ok")});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') alert("ok")});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') left()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') move()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') right()});
 document.addEventListener('keydown', event => {if (event.key == ' ') alert("ok")});
 
 // ----------VARS (Not the place)-------------------------------------------------------------------------
@@ -27,6 +27,8 @@ let temp
 let grey = [245, 245, 245];
 let black = [235, 235, 235];
 let yellow = [255 ,255, 0];
+let blue = [0, 0, 255];
+let red = [255, 0, 0];
 
 // ----------Classes--------------------------------------------------------------------------------------
 
@@ -48,22 +50,20 @@ class Square {
 class Shapes {
   colour;
   bottom;
-}
-
-class Cube extends Shapes {
-  sq1 = [0, 4];
-  sq2 = [0, 5];
-  sq3 = [1, 4];
-  sq4 = [1, 5];
+  sq1;
+  sq2;
+  sq3;
+  sq4;
 
   appear() {
-    grid[this.sq1[0]][this.sq1[1]].changeColour(yellow);
-    grid[this.sq2[0]][this.sq2[1]].changeColour(yellow);
-    grid[this.sq3[0]][this.sq3[1]].changeColour(yellow);
-    grid[this.sq4[0]][this.sq4[1]].changeColour(yellow);
+    grid[this.sq1[0]][this.sq1[1]].changeColour(this.colour);
+    grid[this.sq2[0]][this.sq2[1]].changeColour(this.colour);
+    grid[this.sq3[0]][this.sq3[1]].changeColour(this.colour);
+    grid[this.sq4[0]][this.sq4[1]].changeColour(this.colour);
   }
 
   down() {
+    if (this.sq3[0] == 19) return;
     grid[this.sq1[0]][this.sq1[1]].changeColour(grid[this.sq1[0]][this.sq1[1]].original);
     grid[this.sq2[0]][this.sq2[1]].changeColour(grid[this.sq2[0]][this.sq2[1]].original);
     grid[this.sq3[0]][this.sq3[1]].changeColour(grid[this.sq3[0]][this.sq3[1]].original);
@@ -76,8 +76,61 @@ class Cube extends Shapes {
 
   this.appear();
   }
+
+  left() {
+    if(this.sq1[1] == 0 || this.sq1[1] == 0) return;
+    grid[this.sq1[0]][this.sq1[1]].changeColour(grid[this.sq1[0]][this.sq1[1]].original);
+    grid[this.sq2[0]][this.sq2[1]].changeColour(grid[this.sq2[0]][this.sq2[1]].original);
+    grid[this.sq3[0]][this.sq3[1]].changeColour(grid[this.sq3[0]][this.sq3[1]].original);
+    grid[this.sq4[0]][this.sq4[1]].changeColour(grid[this.sq4[0]][this.sq4[1]].original);
+
+    this.sq1[1] -= 1;
+    this.sq2[1] -= 1;
+    this.sq3[1] -= 1;
+    this.sq4[1] -= 1;
+    this.appear();
+  }
+
+  right() {
+    if(this.sq4[1] == 9 || this.sq4[0] == 19) return;
+    grid[this.sq1[0]][this.sq1[1]].changeColour(grid[this.sq1[0]][this.sq1[1]].original);
+    grid[this.sq2[0]][this.sq2[1]].changeColour(grid[this.sq2[0]][this.sq2[1]].original);
+    grid[this.sq3[0]][this.sq3[1]].changeColour(grid[this.sq3[0]][this.sq3[1]].original);
+    grid[this.sq4[0]][this.sq4[1]].changeColour(grid[this.sq4[0]][this.sq4[1]].original);
+
+    this.sq1[1] += 1;
+    this.sq2[1] += 1;
+    this.sq3[1] += 1;
+    this.sq4[1] += 1;
+    this.appear();
+  }
 }
 
+// I, O, T, S, Z, J, and L.
+
+class Cube extends Shapes {
+  colour = yellow;
+  sq1 = [0, 4];
+  sq2 = [0, 5];
+  sq3 = [1, 4];
+  sq4 = [1, 5];
+}
+
+class Bar extends Shapes {
+  colour = blue;
+  sq1 = [0, 3];
+  sq2 = [0, 4];
+  sq3 = [0, 5];
+  sq4 = [0, 6];
+}
+
+class L extends Shapes {
+  colour = red;
+  sq1 = [0, 3];
+  sq2 = [0, 4];
+  sq3 = [0, 5];
+  sq4 = [1, 5];
+}
 
 // ----------Functions -----------------------------------------------------------------------------------
 
@@ -116,24 +169,29 @@ function draw_grid(cvs_x, cvs_y) {
   }
 }
 
+
 function snart() {
-  let a = new Cube();
+  let a = new L();
   a.appear();
   temp = a;
 }
 
 function move() {
-  wait();
-}
-
-function wait() {
-  setTimeout(finish, 300)
+  if (temp.sq1[1] == 17) {
+     return;
+  }
+  setTimeout(finish, 300);
 }
 
 function finish() {
-  console.log('finish');
   temp.down();
+  move();
+}
 
-  if(temp.sq3[1] == 19) return;
-  move()
+function left() {
+  temp.left();
+}
+
+function right() {
+  temp.right();
 }
