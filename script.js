@@ -9,11 +9,12 @@
 'use strict';
 // ---------- Event Listeners-----------------------------------------------------------------------------
 
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') snart()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') alert('not working yet')});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') left()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') move()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') move1()});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') right()});
 document.addEventListener('keydown', event => {if (event.key == ' ') alert("ok")});
+document.getElementById('play').addEventListener('click', to_newpiece)
 
 // ----------VARS (Not the place)-------------------------------------------------------------------------
 
@@ -21,7 +22,10 @@ let cvs;
 let cvs_x = 400;
 let cvs_y = 800;
 let grid = [];
-let temp
+let peices = []
+let current_peice;
+let temp;
+let gameover = false;
 
 // colours
 let grey = [245, 245, 245];
@@ -34,7 +38,7 @@ let red = [255, 0, 0];
 
 class Square {
   occupied = false;
-  colour = [255, 0, 0];
+  colour;
   original;
 
   constructor(colour) {
@@ -49,7 +53,7 @@ class Square {
 
 class Shapes {
   colour;
-  bottom;
+  bottom = false;
   sq1;
   sq2;
   sq3;
@@ -63,7 +67,24 @@ class Shapes {
   }
 
   down() {
-    if (this.sq3[0] == 19) return;
+    if (grid[this.sq1[0] + 1][this.sq1[1]].occupied == true) {
+      this.place();
+      return;
+    }
+    else if (grid[this.sq2[0] + 1][this.sq2[1]].occupied == true) {
+      this.place();
+      return;
+    }
+    else if (grid[this.sq3[0] + 1][this.sq3[1]].occupied == true) {
+      this.place();
+      return;
+    }
+    else if (grid[this.sq4[0] + 1][this.sq4[1]].occupied == true) {
+      this.place();
+      return;
+    }
+
+
     grid[this.sq1[0]][this.sq1[1]].changeColour(grid[this.sq1[0]][this.sq1[1]].original);
     grid[this.sq2[0]][this.sq2[1]].changeColour(grid[this.sq2[0]][this.sq2[1]].original);
     grid[this.sq3[0]][this.sq3[1]].changeColour(grid[this.sq3[0]][this.sq3[1]].original);
@@ -75,10 +96,27 @@ class Shapes {
     this.sq4[0] += 1;
 
   this.appear();
+
+  if (this.sq4[0] == 19) this.place();
   }
 
   left() {
+
     if(this.sq1[1] == 0 || this.sq1[1] == 0) return;
+
+    else if (grid[this.sq1[0]][this.sq1[1] - 1].occupied == true) {
+      return;
+    }
+    else if (grid[this.sq2[0] ][this.sq2[1] - 1].occupied == true) {
+      return;
+    }
+    else if (grid[this.sq3[0]][this.sq3[1] - 1].occupied == true) {
+      return;
+    }
+    else if (grid[this.sq4[0]][this.sq4[1] - 1].occupied == true) {
+      return;
+    }
+
     grid[this.sq1[0]][this.sq1[1]].changeColour(grid[this.sq1[0]][this.sq1[1]].original);
     grid[this.sq2[0]][this.sq2[1]].changeColour(grid[this.sq2[0]][this.sq2[1]].original);
     grid[this.sq3[0]][this.sq3[1]].changeColour(grid[this.sq3[0]][this.sq3[1]].original);
@@ -93,6 +131,19 @@ class Shapes {
 
   right() {
     if(this.sq4[1] == 9 || this.sq4[0] == 19) return;
+
+    else if (grid[this.sq1[0]][this.sq1[1] + 1].occupied == true) {
+      return;
+    }
+    else if (grid[this.sq2[0] ][this.sq2[1] + 1].occupied == true) {
+      return;
+    }
+    else if (grid[this.sq3[0]][this.sq3[1] + 1].occupied == true) {
+      return;
+    }
+    else if (grid[this.sq4[0]][this.sq4[1] + 1].occupied == true) {
+      return;
+    }
     grid[this.sq1[0]][this.sq1[1]].changeColour(grid[this.sq1[0]][this.sq1[1]].original);
     grid[this.sq2[0]][this.sq2[1]].changeColour(grid[this.sq2[0]][this.sq2[1]].original);
     grid[this.sq3[0]][this.sq3[1]].changeColour(grid[this.sq3[0]][this.sq3[1]].original);
@@ -103,6 +154,17 @@ class Shapes {
     this.sq3[1] += 1;
     this.sq4[1] += 1;
     this.appear();
+  }
+
+  place() {
+    grid[this.sq1[0]][this.sq1[1]].occupied = true;
+    grid[this.sq2[0]][this.sq2[1]].occupied = true;
+    grid[this.sq3[0]][this.sq3[1]].occupied = true;
+    grid[this.sq4[0]][this.sq4[1]].occupied = true;
+    this.bottom = true;
+    this.appear();
+
+    new_piece();
   }
 }
 
@@ -134,6 +196,7 @@ class L extends Shapes {
 
 // ----------Functions -----------------------------------------------------------------------------------
 
+// ------ Canvas Stuff ------------------------------
 function setup() {
   cvs = createCanvas(cvs_x, cvs_y);
    background(0)
@@ -169,29 +232,59 @@ function draw_grid(cvs_x, cvs_y) {
   }
 }
 
-
+// -- Other things ------------------
 function snart() {
   let a = new L();
   a.appear();
   temp = a;
 }
 
-function move() {
-  if (temp.sq1[1] == 17) {
-     return;
-  }
-  setTimeout(finish, 300);
+function move1() {
+  setTimeout(move2, 300);
 }
 
-function finish() {
-  temp.down();
-  move();
+function move2() {
+  current_peice.down();
+  move1();
 }
+
+function new_piece() {
+  for(let i = 0; i != 3; i++) {
+    if (grid[0][3 + i].occupied == true) gameover = true;;
+  }
+
+  if (gameover == true) return;
+
+
+  let choice = randInt(0, 2);
+  if (choice == 0) current_peice = new Bar();
+  if (choice == 1) current_peice = new Cube();
+  if (choice == 2) current_peice = new L();
+
+  current_peice.appear();
+  move1();
+}
+
+function to_newpiece() {
+  new_piece();
+}
+
+function game_over() {
+
+}
+// ---------- Key functions --------------------------------------------------
 
 function left() {
-  temp.left();
+  current_peice.left();
 }
 
 function right() {
-  temp.right();
+  current_peice.right();
+}
+
+// --------------- Wack ---------------------------------
+function randInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
