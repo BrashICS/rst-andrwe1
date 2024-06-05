@@ -14,7 +14,7 @@ document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') move1()});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') right()});
 document.addEventListener('keydown', event => {if (event.key == ' ') alert("ok")});
-document.getElementById('play').addEventListener('click', to_newpiece)
+document.getElementById('play').addEventListener('click', play)
 
 // ----------VARS (Not the place)-------------------------------------------------------------------------
 
@@ -60,6 +60,7 @@ class Shapes {
   sq4;
 
   appear() {
+    console.log('APPEAR')
     grid[this.sq1[0]][this.sq1[1]].changeColour(this.colour);
     grid[this.sq2[0]][this.sq2[1]].changeColour(this.colour);
     grid[this.sq3[0]][this.sq3[1]].changeColour(this.colour);
@@ -157,14 +158,13 @@ class Shapes {
   }
 
   place() {
+    this.bottom = true;
     grid[this.sq1[0]][this.sq1[1]].occupied = true;
     grid[this.sq2[0]][this.sq2[1]].occupied = true;
     grid[this.sq3[0]][this.sq3[1]].occupied = true;
     grid[this.sq4[0]][this.sq4[1]].occupied = true;
-    this.bottom = true;
-    this.appear();
 
-    new_piece();
+    this.appear();
   }
 }
 
@@ -230,39 +230,36 @@ function draw_grid(cvs_x, cvs_y) {
 
     }
   }
+
+  // if (current_peice.bottom == true) new_piece();
 }
 
 // -- Other things ------------------
-function snart() {
-  let a = new L();
-  a.appear();
-  temp = a;
-}
-
 function move1() {
   setTimeout(move2, 300);
+
+  // if (current_peice.bottom == true) return;
 }
 
 function move2() {
   current_peice.down();
-  move1();
+
 }
+// ---------------------
+
 
 function new_piece() {
-  for(let i = 0; i != 3; i++) {
-    if (grid[0][3 + i].occupied == true) gameover = true;;
-  }
 
-  if (gameover == true) return;
+  console.log('new peice');
+   // if (gameover == true) return;
 
 
   let choice = randInt(0, 2);
-  if (choice == 0) current_peice = new Bar();
-  if (choice == 1) current_peice = new Cube();
-  if (choice == 2) current_peice = new L();
+  if (choice == 0) return new Bar();
+  if (choice == 1) return new Cube();
+  if (choice == 2) return new L();
 
-  current_peice.appear();
-  move1();
+
 }
 
 function to_newpiece() {
@@ -272,6 +269,35 @@ function to_newpiece() {
 function game_over() {
 
 }
+
+
+function play() {
+
+  for(let x =0; x != 5; x++) {
+    current_peice = new_piece();
+    console.log(10);
+    current_peice.appear();
+
+    for (let i = 0; i != 4; i ++) {
+      console.log('move 1')
+
+      move1();
+    }
+
+
+
+    for(let i = 0; i != 3; i++) {
+      if (grid[0][3 + i].occupied == true) {
+        console.log('check')
+        gameover = true;
+        i = 3;
+      }
+    }
+
+  new_piece();
+  } // while(gameover == false)
+
+ }
 // ---------- Key functions --------------------------------------------------
 
 function left() {
