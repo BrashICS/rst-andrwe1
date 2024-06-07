@@ -9,12 +9,12 @@
 'use strict';
 // ---------- Event Listeners-----------------------------------------------------------------------------
 
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') w()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') alert('not working yet')});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') left()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') going()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') move1()});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') right()});
 document.addEventListener('keydown', event => {if (event.key == ' ') alert("ok")});
-document.getElementById('play').addEventListener('click', play)
+document.getElementById('play').addEventListener('click', to_newpiece)
 
 // ----------VARS (Not the place)-------------------------------------------------------------------------
 
@@ -60,7 +60,6 @@ class Shapes {
   sq4;
 
   appear() {
-    console.log('APPEAR')
     grid[this.sq1[0]][this.sq1[1]].changeColour(this.colour);
     grid[this.sq2[0]][this.sq2[1]].changeColour(this.colour);
     grid[this.sq3[0]][this.sq3[1]].changeColour(this.colour);
@@ -158,13 +157,14 @@ class Shapes {
   }
 
   place() {
-    this.bottom = true;
     grid[this.sq1[0]][this.sq1[1]].occupied = true;
     grid[this.sq2[0]][this.sq2[1]].occupied = true;
     grid[this.sq3[0]][this.sq3[1]].occupied = true;
     grid[this.sq4[0]][this.sq4[1]].occupied = true;
-
+    this.bottom = true;
     this.appear();
+
+    // new_piece();
   }
 }
 
@@ -233,71 +233,47 @@ function draw_grid(cvs_x, cvs_y) {
 }
 
 // -- Other things ------------------
-function move1() {
-  setTimeout(move2, 600);
 
-  console.log("chicken")
+function move1() {
+  if(current_peice.bottom == true) {
+    console.log('working')
+    new_piece();
+    return;
+  }
+  else{
+  setTimeout(move2, 300);
+  }
 }
 
 function move2() {
   current_peice.down();
-
-}
-// ---------------------
-
+  move1();
+  }
 
 function new_piece() {
+  for(let i = 0; i != 3; i++) {
+    if (grid[0][3 + i].occupied == true) gameover = true;;
+  }
 
-  console.log('new peice');
+  if (gameover == true) return;
+
 
   let choice = randInt(0, 2);
-  if (choice == 0) return new Bar();
-  if (choice == 1) return new Cube();
-  if (choice == 2) return new L();
+  if (choice == 0) current_peice = new Bar();
+  if (choice == 1) current_peice = new Cube();
+  if (choice == 2) current_peice = new L();
 
-
-}
-
-function going() {
-  if (current_peice.bottom == true) {
-    console.log('done')
-    return;
-
-  }
-
-  else {
-    console.log()
-    setTimeout(move1, 300)
-    going();
-
-  }
-}
-
-function w() {
-  current_peice = new_piece();
   current_peice.appear();
+  move1();
 }
-// function play() {
 
-//   for(let x = 0; x != 5; x++) {
-//     current_peice = new_piece();
-//     current_peice.appear();
+function to_newpiece() {
+  new_piece();
+}
 
-//     for (let i = 0; i != 4; i ++) {
-//       console.log('move 1')
+function game_over() {
 
-//       move1();
-//     }
-
-//     for(let i = 0; i != 3; i++) {
-//       if (grid[0][3 + i].occupied == true) {
-//         console.log('check')
-//         gameover = true;
-//       }
-//     }
-//   }
-
-//  }
+}
 // ---------- Key functions --------------------------------------------------
 
 function left() {
