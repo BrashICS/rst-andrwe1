@@ -10,11 +10,13 @@
 // ---------- Event Listeners-----------------------------------------------------------------------------
 
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') alert('not working yet')});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') left()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') current_peice.left()});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') move1()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') right()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') current_peice.right()});
 document.addEventListener('keydown', event => {if (event.key == ' ') alert("ok")});
-document.getElementById('play').addEventListener('click', to_newpiece)
+document.getElementById('play').addEventListener('click', new_piece);
+
+let points = document.getElementById('score');
 
 // ----------VARS (Not the place)-------------------------------------------------------------------------
 
@@ -26,6 +28,7 @@ let peices = []
 let current_peice;
 let temp;
 let gameover = false;
+let score = 0;
 
 // colours
 let grey = [245, 245, 245];
@@ -33,7 +36,10 @@ let black = [235, 235, 235];
 let yellow = [255 ,255, 0];
 let blue = [0, 0, 255];
 let red = [255, 0, 0];
-
+let orange = [255, 165, 0];
+let purple = [128, 0, 128];
+let green = [34,139,34];
+let brown = [165, 42, 42];
 // ----------Classes--------------------------------------------------------------------------------------
 
 class Square {
@@ -157,13 +163,19 @@ class Shapes {
   }
 
   place() {
+    
     grid[this.sq1[0]][this.sq1[1]].occupied = true;
     grid[this.sq2[0]][this.sq2[1]].occupied = true;
     grid[this.sq3[0]][this.sq3[1]].occupied = true;
     grid[this.sq4[0]][this.sq4[1]].occupied = true;
+
     this.bottom = true;
     this.appear();
 
+    line();
+
+    score += 10;
+    points.innerText = 'Score: ' + score;
     // new_piece();
   }
 }
@@ -186,7 +198,7 @@ class Bar extends Shapes {
   sq4 = [0, 6];
 }
 
-class L extends Shapes {
+class J extends Shapes {
   colour = red;
   sq1 = [0, 3];
   sq2 = [0, 4];
@@ -194,6 +206,37 @@ class L extends Shapes {
   sq4 = [1, 5];
 }
 
+class L extends Shapes {
+  colour = orange;
+  sq1 = [0, 3];
+  sq2 = [0, 4];
+  sq3 = [0, 5];
+  sq4 = [1, 3];
+}
+
+class T extends Shapes {
+  colour = purple;
+  sq1 = [0, 3];
+  sq2 = [0, 4];
+  sq3 = [0, 5];
+  sq4 = [1, 4];
+}
+
+class S extends Shapes {
+  colour = green;
+  sq1 = [1, 3];
+  sq2 = [0, 5];
+  sq3 = [0, 4];
+  sq4 = [1, 4];
+}
+
+class Z extends Shapes {
+  colour = brown;
+  sq1 = [0, 3];
+  sq2 = [0, 4];
+  sq3 = [1, 4];
+  sq4 = [1, 5];
+}
 // ----------Functions -----------------------------------------------------------------------------------
 
 // ------ Canvas Stuff ------------------------------
@@ -248,7 +291,7 @@ function move1() {
 function move2() {
   current_peice.down();
   move1();
-  }
+}
 
 function new_piece() {
   for(let i = 0; i != 3; i++) {
@@ -258,22 +301,37 @@ function new_piece() {
   if (gameover == true) return;
 
 
-  let choice = randInt(0, 2);
+  let choice = randInt(0, 6);
   if (choice == 0) current_peice = new Bar();
   if (choice == 1) current_peice = new Cube();
-  if (choice == 2) current_peice = new L();
+  if (choice == 2) current_peice = new J();
+  if (choice == 3) current_peice = new L();
+  if (choice == 4) current_peice = new T();
+  if (choice == 5) current_peice = new S();
+  if (choice == 6) current_peice = new Z();
 
   current_peice.appear();
   move1();
 }
 
-function to_newpiece() {
-  new_piece();
+function line() {
+  console.log('line')
+  for (let i = 0; i != 19; i++) {
+    let line = true;
+    for (let x = 0; x != 9; x++) {
+      if (grid[i][x].occupied == false) {
+        line = false;
+      }
+      if (line == true) {
+        for (let x = 0; x != 9; x++) {
+          grid[i][x].occupied = false;
+          grid[i][x].colour = grid[i][x].original
+        }
+      }
+    }
+  }
 }
 
-function game_over() {
-
-}
 // ---------- Key functions --------------------------------------------------
 
 function left() {
