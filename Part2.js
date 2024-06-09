@@ -30,6 +30,7 @@ let current_peice;
 let temp;
 let gameover = false;
 let score = 0;
+let blank;
 
 // colours
 let grey = [245, 245, 245];
@@ -270,6 +271,7 @@ function setup() {
       }
     }
   }
+  blank = [new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey)];
 }
 
 function draw() {
@@ -295,6 +297,7 @@ function draw_grid(cvs_x, cvs_y) {
 function move1() {
   if(current_peice.bottom == true) {
     console.log('working')
+    // setTimeout(timeSaver, 40)
     new_piece();
     return;
   }
@@ -343,20 +346,21 @@ function poop() {
           for (let x = 0; x != 10; x++) {
             grid[i][x].occupied = false;
             grid[i][x].colour = grid[i][x].original;
-
-        for (let x = i - 1; x != 0; x--) {
-            for(let y = 0; y != 10; y++) {
-
-              grid[x][y].drop(grid[x-1][y].colour, grid[x - 1][y].occupied)
             }
+
+            for (let x = i; x != 1; x--) {
+              let temp = [];
+              for (let z = 0; z != 10; z++) {
+                grid[x][z] = grid [x - 1][z];
+              }
+            }
+
+          }
         }
       }
-    }
-  }
-}
+
 
 // ---------- Key functions --------------------------------------------------
-
 function left() {
   current_peice.left();
 }
@@ -371,6 +375,8 @@ function randInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+function timeSaver() { }
 
 function pause() {
   gameover = true;
