@@ -334,7 +334,6 @@ function new_piece() {
 }
 
 function poop() {
-  console.log('line')
   for (let i = 0; i != 20; i++) {
     let line = true;
     for (let x = 0; x != 10; x++) {
@@ -349,12 +348,11 @@ function poop() {
             }
 
             for (let x = i; x != 1; x--) {
-              let temp = [];
-              for (let z = 0; z != 10; z++) {
-                grid[x][z] = grid [x - 1][z];
-              }
-            }
+              let copiedArray = [...grid[x - 1]];
 
+              grid[x] = copiedArray;
+              console.log(copiedArray);
+            }
           }
         }
       }
