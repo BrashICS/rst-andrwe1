@@ -80,6 +80,7 @@ class Shapes {
   sq2;
   sq3;
   sq4;
+  rotation = 0;
 
   appear() {
     grid[this.sq1[0]][this.sq1[1]].changeColour(this.colour);
@@ -178,6 +179,33 @@ class Shapes {
     this.appear();
   }
 
+  rotate() {
+
+      for(let i = 0; i != 3; i++) {
+      if (rotation == 0) {
+
+        // y == -;
+        rotation++;
+      } else if (rotation == 1) {
+
+        // y == -
+        // x == -
+
+        rotation++;
+      } else if (rotation == 2) {
+
+        // x == -
+        // y == +
+        rotation++
+      } else if(rotation == 3) {
+
+        //x == +
+        // y == +
+        rotation = 0;
+      }
+    }
+  }
+
   place() {
 
     grid[this.sq1[0]][this.sq1[1]].occupied = true;
@@ -188,7 +216,7 @@ class Shapes {
     this.bottom = true;
     this.appear();
 
-    poop();
+    line_check();
 
     score += 10;
     points.innerText = 'Score: ' + score;
@@ -271,7 +299,6 @@ function setup() {
       }
     }
   }
-  blank = [new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey)];
 }
 
 function draw() {
@@ -312,6 +339,8 @@ function move2() {
 }
 
 function new_piece() {
+
+
   if (gameover == true) return;
   for(let i = 0; i != 3; i++) {
     if (grid[0][3 + i].occupied == true) gameover = true;;
@@ -333,29 +362,29 @@ function new_piece() {
   move1();
 }
 
-function poop() {
+function line_check() {
+
+  let bryan = [new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey)];
+
+  let brett = [new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black)];
+
   for (let i = 0; i != 20; i++) {
     let line = true;
     for (let x = 0; x != 10; x++) {
       if (grid[i][x].occupied == false) {
         line = false;
+       }
       }
-        }
-        if (line == true) {
-          for (let x = 0; x != 10; x++) {
-            grid[i][x].occupied = false;
-            grid[i][x].colour = grid[i][x].original;
-            }
-
-            for (let x = i; x != 1; x--) {
-              let copiedArray = [...grid[x - 1]];
-
-              grid[x] = copiedArray;
-              console.log(copiedArray);
-            }
+      if (line == true) {
+          grid.splice(i, 1)
+          if (grid[0][0].colour == black) {
+          grid.unshift(brett);
+          } else {
+            grid.unshift(bryan);
           }
         }
       }
+    }
 
 
 // ---------- Key functions --------------------------------------------------
@@ -373,8 +402,6 @@ function randInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-function timeSaver() { }
 
 function pause() {
   gameover = true;
