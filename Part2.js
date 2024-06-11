@@ -349,7 +349,7 @@ function new_piece() {
   if (gameover == true) return;
 
 
-  let choice = randInt(0, 1);
+  let choice = randInt(0, 6);
   if (choice == 0) current_peice = new Bar();
   if (choice == 1) current_peice = new Cube();
   if (choice == 2) current_peice = new J();
