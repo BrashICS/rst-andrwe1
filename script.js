@@ -180,9 +180,16 @@ class Shapes {
   }
 
   rotate() {
+    let x_buffer = this.sq2[1];
+    let y_buffer = this.sq2[0];
 
-      for(let i = 0; i != 3; i++) {
+    let blocks = [this.sq1, this.sq2, this.sq3, this.sq4];
+    for (let x = 0; x != 4; x++) {
+      blocks[x].reverse();
+    }
+
       if (rotation == 0) {
+
 
         // y == -;
         rotation++;
@@ -203,7 +210,6 @@ class Shapes {
         // y == +
         rotation = 0;
       }
-    }
   }
 
   place() {
@@ -228,8 +234,8 @@ class Shapes {
 
 class Cube extends Shapes {
   colour = yellow;
-  sq1 = [0, 4];
-  sq2 = [0, 5];
+  sq1 = [0, 5];
+  sq2 = [0, 4];
   sq3 = [1, 4];
   sq4 = [1, 5];
 }
@@ -269,8 +275,8 @@ class T extends Shapes {
 class S extends Shapes {
   colour = green;
   sq1 = [1, 3];
-  sq2 = [0, 5];
-  sq3 = [0, 4];
+  sq2 = [0, 4];
+  sq3 = [0, 5];
   sq4 = [1, 4];
 }
 
@@ -349,7 +355,7 @@ function new_piece() {
   if (gameover == true) return;
 
 
-  let choice = randInt(0, 6);
+  let choice = randInt(0, 1);
   if (choice == 0) current_peice = new Bar();
   if (choice == 1) current_peice = new Cube();
   if (choice == 2) current_peice = new J();
