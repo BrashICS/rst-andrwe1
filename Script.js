@@ -13,14 +13,18 @@ document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') current_peice.left()});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') move1()});
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') current_peice.right()});
-document.addEventListener('keydown', event => {if (event.key == ' ') alert("ok")});
+document.addEventListener('keydown', event => {if (event.key == ' ') rever()});
 document.getElementById('play').addEventListener('click', new_piece);
 document.getElementById('pause').addEventListener('click', pause);
 
 let points = document.getElementById('score');
 
 // ----------VARS (Not the place)-------------------------------------------------------------------------
-
+function rever() {
+  let arr = [1,2]
+  arr.reverse()
+  console.log(arr)
+}
 let cvs;
 let cvs_x = 400;
 let cvs_y = 800;
@@ -186,9 +190,16 @@ class Shapes {
     this.appear();
   }
 
-  rotate() {
+   rotate() {
+
+    if (this.type == 'cube') return;
 
     this.dissapear();
+    // let sq1 = [1,0]
+    // let sq2 = [0, 0]
+    // let sq3 = [0,-1]
+    // let sq4 = [-1, 0]
+
 
     let blocks = [this.sq1, this.sq2, this.sq3, this.sq4];
     let x_buffer = this.sq2[1];
@@ -199,37 +210,45 @@ class Shapes {
       blocks[i][1] -= x_buffer;
 
     }
-console.log(blocks)
+  //console.log(blocks)
 
     for (let x = 0; x != 4; x++) {
+
       blocks[x].reverse();
 
       if (this.rotation == 0) {
-        blocks[x][0] *= - 1;
-
+        //blocks[x][1] *= - 1;
+        console.log('0')
         // y == -;
-        this.rotation++;
+
       } else if (this.rotation == 1) {
-
-
-        blocks[x][1] *= -1;
+          blocks[x][0] *= -1
+        console.log(1)
+        // blocks[x][1] *= -1;
         // y == -
         // x == -
 
-        this.rotation++;
-      } else if (this.rotation == 2) {
 
-        blocks[x][0] *= -1;
-        blocks[x][1] *= -1;
+      } else if (this.rotation == 2) {
+        console.log(2)
+        //blocks[x][0] *= -1;
+        //blocks[x][1] *= -1;
         // x == -
         // y == +
-        this.rotation++
+
       } else if(this.rotation == 3) {
-        //Nothing I think
+        blocks[x][0] *= -1;
+        console.log(3)
         //x == +
         // y == +
-        this.rotation = 0;
+
       }
+    }
+
+    if (this.rotation == 3) {
+      this.rotation = 0;
+    } else {
+      this.rotation++;
     }
 
     for (let i = 0; i != 4; i++) {
@@ -237,7 +256,6 @@ console.log(blocks)
       blocks[i][1] += x_buffer;
 
     }
-
     this.appear();
   }
 
@@ -262,6 +280,7 @@ console.log(blocks)
 // I, O, T, S, Z, J, and L.
 
 class Cube extends Shapes {
+  type = 'cube'
   colour = yellow;
   sq1 = [0, 5];
   sq2 = [0, 4];
@@ -270,6 +289,7 @@ class Cube extends Shapes {
 }
 
 class Bar extends Shapes {
+  type = 'bar'
   colour = blue;
   sq1 = [0, 3];
   sq2 = [0, 4];
@@ -278,6 +298,7 @@ class Bar extends Shapes {
 }
 
 class J extends Shapes {
+  type = 'j'
   colour = red;
   sq1 = [0, 3];
   sq2 = [0, 4];
@@ -286,6 +307,7 @@ class J extends Shapes {
 }
 
 class L extends Shapes {
+  type = 'l'
   colour = orange;
   sq1 = [0, 3];
   sq2 = [0, 4];
@@ -294,6 +316,7 @@ class L extends Shapes {
 }
 
 class T extends Shapes {
+  type = 't'
   colour = purple;
   sq1 = [0, 3];
   sq2 = [0, 4];
@@ -302,6 +325,7 @@ class T extends Shapes {
 }
 
 class S extends Shapes {
+  type = 's'
   colour = green;
   sq1 = [1, 3];
   sq2 = [0, 4];
@@ -310,6 +334,7 @@ class S extends Shapes {
 }
 
 class Z extends Shapes {
+  type = 'z'
   colour = brown;
   sq1 = [0, 3];
   sq2 = [0, 4];
