@@ -131,7 +131,7 @@ class Shapes {
 
   this.appear();
 
-  if (this.sq4[0] == 19) this.place();
+  if (this.sq1[0] == 19 || this.sq2[0] == 19 || this.sq3[0] == 19 || this.sq4[0] == 19 ) this.place();
   }
 
   left() {
@@ -195,11 +195,6 @@ class Shapes {
     if (this.type == 'cube') return;
 
     this.dissapear();
-    // let sq1 = [1,0]
-    // let sq2 = [0, 0]
-    // let sq3 = [0,-1]
-    // let sq4 = [-1, 0]
-
 
     let blocks = [this.sq1, this.sq2, this.sq3, this.sq4];
     let x_buffer = this.sq2[1];
@@ -208,53 +203,16 @@ class Shapes {
     for (let i = 0; i != 4; i++) {
       blocks[i][0] -= y_buffer;
       blocks[i][1] -= x_buffer;
-
     }
-  //console.log(blocks)
 
     for (let x = 0; x != 4; x++) {
-
       blocks[x].reverse();
-
-      if (this.rotation == 0) {
-        //blocks[x][1] *= - 1;
-        console.log('0')
-        // y == -;
-
-      } else if (this.rotation == 1) {
-          blocks[x][0] *= -1
-        console.log(1)
-        // blocks[x][1] *= -1;
-        // y == -
-        // x == -
-
-
-      } else if (this.rotation == 2) {
-        console.log(2)
-        //blocks[x][0] *= -1;
-        //blocks[x][1] *= -1;
-        // x == -
-        // y == +
-
-      } else if(this.rotation == 3) {
-        blocks[x][0] *= -1;
-        console.log(3)
-        //x == +
-        // y == +
-
-      }
-    }
-
-    if (this.rotation == 3) {
-      this.rotation = 0;
-    } else {
-      this.rotation++;
+      blocks[x][0] *= - 1;
     }
 
     for (let i = 0; i != 4; i++) {
       blocks[i][0] += y_buffer;
       blocks[i][1] += x_buffer;
-
     }
     this.appear();
   }
@@ -273,7 +231,6 @@ class Shapes {
 
     score += 10;
     points.innerText = 'Score: ' + score;
-    // new_piece();
   }
 }
 
