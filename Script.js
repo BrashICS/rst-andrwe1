@@ -102,6 +102,7 @@ class Shapes {
 
   down() {
     // Moves the x value of each piece down by 1, unless it does not meet the perameters
+    if (this.bottom == true) return;
 
     //Check if the piece under it is occupied
     if (grid[this.sq1[0] + 1][this.sq1[1]].occupied == true) {
@@ -138,6 +139,7 @@ class Shapes {
 
   left() {
     //Moves x pieces left, as long as parameters are true
+    if(this.sq4[1] == 0 || this.sq3[1]== 0 || this.sq2[1]== 0 || this.sq1[1]== 0) return;
 
     // If the piece is on the far left
     if(this.sq1[1] == 0) return;
@@ -168,7 +170,7 @@ class Shapes {
 
   right() {
     // Checks if the piece is on the far right
-    if(this.sq4[1] == 9) return;
+    if(this.sq4[1] == 9 || this.sq3[1]== 9 || this.sq2[1]== 9 || this.sq1[1]== 9) return;
 
     // Checks if the piece under it is occupied
     else if (grid[this.sq1[0]][this.sq1[1] + 1].occupied == true) {
@@ -196,13 +198,24 @@ class Shapes {
 
    rotate() {
 
+    let tempsq1 = [];
+    let tempsq2 = [];
+    let tempsq3 = [];
+    let tempsq4 = [];
     // Cubes don't rotate
     if (this.type == 'cube') return;
 
-    this.dissapear();
 
     // Creates new array of each square coordinate
-    let blocks = [this.sq1, this.sq2, this.sq3, this.sq4];
+
+    for (let i = 0; i != 2; i++) {
+      tempsq1.push(this.sq1[i]);
+      tempsq2.push(this.sq2[i]);
+      tempsq3.push(this.sq3[i]);
+      tempsq4.push(this.sq4[i]);
+    }
+
+    let blocks = [tempsq1, tempsq2, tempsq3, tempsq4];
 
     // let past_blocks = new Array(4)
     // for(let i = 0; i != 4; i++) {
@@ -229,6 +242,28 @@ class Shapes {
       blocks[i][0] += y_buffer;
       blocks[i][1] += x_buffer;
     }
+
+    for (let i = 0; i != 4; i++) {
+      // if (grid[blocks[i][0]][blocks[i][1]].occupied == true) {
+      //   return;
+
+      // Checks if piece will rotate into another occupied object or if it rotates off the grid/poops out error it will abort the rotation
+      try {
+        if (grid[blocks[i][0]][blocks[i][1]].occupied == true) {
+          return;
+        }
+      }
+      catch(err) {
+        return;
+      }
+
+  }
+    this.dissapear();
+
+    this.sq1 = blocks[0];
+    this.sq2 = blocks[1];
+    this.sq3 = blocks[2];
+    this.sq4 = blocks[3];
 
     this.appear();
   }
