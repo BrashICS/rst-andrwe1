@@ -15,7 +15,7 @@ document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's
 document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') current_peice.right()});
 document.addEventListener('keydown', event => {if (event.key == ' ') rever()});
 document.getElementById('play').addEventListener('click', new_game);
-document.getElementById('pause').addEventListener('click', pause);
+document.getElementById('kill').addEventListener('click', kill);
 document.getElementById('how to play').addEventListener('click', instructions);
 
 let points = document.getElementById('score');
@@ -64,15 +64,6 @@ class Square {
     this.colour = this.original;
     this.occupied = false;
   }
-
-  // drop(colour, occupied) {
-  //   if(occupied) {
-  //     this.restore();
-  //   } else {
-  //     this.colour = colour;
-  //     this.occupied == true;
-  //   }
-  // }
 }
 
 class Shapes {
@@ -218,11 +209,6 @@ class Shapes {
 
     let blocks = [tempsq1, tempsq2, tempsq3, tempsq4];
 
-    // let past_blocks = new Array(4)
-    // for(let i = 0; i != 4; i++) {
-    //   past_blocks.push(blocks[i]);
-    // }
-
     // Relocates each piece relative to sq2 being (0,0) on a cartesian plane
     let x_buffer = this.sq2[1];
     let y_buffer = this.sq2[0];
@@ -245,10 +231,7 @@ class Shapes {
     }
 
     for (let i = 0; i != 4; i++) {
-      // if (grid[blocks[i][0]][blocks[i][1]].occupied == true) {
-      //   return;
-
-      // Checks if piece will rotate into another occupied object or if it rotates off the grid/poops out error it will abort the rotation
+      // This code checks if the piece would be rotating into another object, and while doing that, will make the if statement scream if the shape rotates off the grid, therefore also making the piece stay in the grid
       try {
         if (grid[blocks[i][0]][blocks[i][1]].occupied == true) {
           return;
@@ -383,11 +366,9 @@ function draw_grid(cvs_x, cvs_y) {
   }
 }
 
-// -- Other things ------------------
+// -- Other things ------------------------------------------------
 
 function new_game() {
-
-
   if(gameover == false) return;
   gameover = false;
 
@@ -424,7 +405,6 @@ function move2() {
 }
 
 function new_piece() {
-
   // if top of the grid is occupied gameover is true
   for(let i = 0; i != 3; i++) {
     if (grid[0][3 + i].occupied == true) {gameover = true;
@@ -436,7 +416,7 @@ function new_piece() {
 
 
   // Randomly chooses next piece
-  let choice = randInt(0, 1);
+  let choice = randInt(0, 6);
   if (choice == 0) current_peice = new Bar();
   if (choice == 1) current_peice = new Cube();
   if (choice == 2) current_peice = new J();
@@ -450,9 +430,9 @@ function new_piece() {
 }
 
 function line_check() {
-// Fix bug here with empty line thing
+  // Removes lines when they are full
   let num_lines = 0;
-  // Two empty lines (RIP Bryan and Brett)
+  // Four empty lines (RIP Bryan and Brett), to prevent array referencing
   let empty_line1 = [new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey)];
 
   let empty_line2 = [new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black)];
@@ -523,7 +503,7 @@ function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function pause() {
+function kill() {
   gameover = true;
   current_peice.bottom = true;
 }
