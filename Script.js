@@ -16,8 +16,10 @@ document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd
 document.addEventListener('keydown', event => {if (event.key == ' ') rever()});
 document.getElementById('play').addEventListener('click', new_game);
 document.getElementById('pause').addEventListener('click', pause);
+document.getElementById('how to play').addEventListener('click', instructions);
 
 let points = document.getElementById('score');
+let linestml = document.getElementById('lines');
 
 // ----------VARS (Not the place)-------------------------------------------------------------------------
 let cvs;
@@ -26,10 +28,9 @@ let cvs_y = 800;
 let grid = [];
 let peices = []
 let current_peice;
-let temp;
 let gameover;
 let score = 0;
-let blank;
+let lines = 0;
 
 // colours
 let grey = [245, 245, 245];
@@ -287,8 +288,8 @@ class Shapes {
   }
 }
 
-// I, O, T, S, Z, J, and L.
-
+// General names refer to what they look like and the actual names used in the tetris game
+// Each piece is refered to as a Tetromino, Hense the name of my game!
 class Cube extends Shapes {
   type = 'cube'
   colour = yellow;
@@ -385,12 +386,20 @@ function draw_grid(cvs_x, cvs_y) {
 // -- Other things ------------------
 
 function new_game() {
-  score = 0;
+
 
   if(gameover == false) return;
   gameover = false;
 
+
   // Resetting
+  score = 0;
+  lines = 0;
+  points.innerText = 'Score: ' +  score;
+  linestml.innerText = 'Lines:' + lines;
+  document.getElementById('gameover').hidden = true
+
+
   new_grid();
   score = 0;
   new_piece();
@@ -418,14 +427,16 @@ function new_piece() {
 
   // if top of the grid is occupied gameover is true
   for(let i = 0; i != 3; i++) {
-    if (grid[0][3 + i].occupied == true) gameover = true;;
+    if (grid[0][3 + i].occupied == true) {gameover = true;
+    document.getElementById('gameover').hidden = false;
+    }
   }
 
   if (gameover == true) return;
 
 
   // Randomly chooses next piece
-  let choice = randInt(0, 6);
+  let choice = randInt(0, 1);
   if (choice == 0) current_peice = new Bar();
   if (choice == 1) current_peice = new Cube();
   if (choice == 2) current_peice = new J();
@@ -439,12 +450,16 @@ function new_piece() {
 }
 
 function line_check() {
-
+// Fix bug here with empty line thing
   let num_lines = 0;
   // Two empty lines (RIP Bryan and Brett)
   let empty_line1 = [new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey)];
 
   let empty_line2 = [new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black)];
+
+  let empty_line3 = [new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey)];
+
+  let empty_line4 = [new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black), new Square(grey), new Square(black)];
 
   // Checks if any lines are formed
   for (let i = 0; i != 20; i++) {
@@ -457,11 +472,20 @@ function line_check() {
       // Removes line from grid and adds new one to the top
       if (line == true) {
           num_lines++;
-          grid.splice(i, 1)
+          grid.splice(i, 1);
           if (grid[0][0].colour == black) {
-          grid.unshift(empty_line2);
+            if (num_lines > 2) {
+              grid.unshift(empty_line4);
+              console.log('yes')
+            } else {
+             grid.unshift(empty_line2);
+            }
           } else {
-            grid.unshift(empty_line1);
+            if (num_lines > 2) {
+              grid.unshift(empty_line1);
+            } else {
+              grid.unshift(empty_line3);
+            }
           }
         }
       }
@@ -476,6 +500,10 @@ function line_check() {
       } else if (num_lines == 4) {
         score += 800;
       }
+
+      lines += num_lines;
+
+      linestml.innerText = 'Lines:' + lines;
     }
 
 
@@ -510,5 +538,14 @@ function new_grid() {
         grid[y].push(new Square(black));
       }
     }
+  }
+}
+
+function instructions() {
+  let x = document.getElementById('instructions');
+  if (x.hidden == true) {
+    x.hidden = false;
+  } else {
+    x.hidden = true;
   }
 }
