@@ -456,7 +456,6 @@ function line_check() {
           if (grid[0][0].colour == black) {
             if (num_lines > 2) {
               grid.unshift(empty_line4);
-              console.log('yes')
             } else {
              grid.unshift(empty_line2);
             }
