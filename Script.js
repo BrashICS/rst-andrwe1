@@ -240,7 +240,6 @@ class Shapes {
       catch(err) {
         return;
       }
-
   }
     this.dissapear();
 
