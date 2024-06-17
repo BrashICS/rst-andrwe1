@@ -9,10 +9,10 @@
 'use strict';
 // ---------- Event Listeners-----------------------------------------------------------------------------
 
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') current_peice.rotate()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') current_peice.left()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') current_peice.down()});
-document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') current_peice.right()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'w') current_piece.rotate()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'a') current_piece.left()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 's') current_piece.down()});
+document.addEventListener('keydown', event => {if (event.key.toLowerCase() == 'd') current_piece.right()});
 document.addEventListener('keydown', event => {if (event.key == ' ') rever()});
 document.getElementById('play').addEventListener('click', new_game);
 document.getElementById('kill').addEventListener('click', kill);
@@ -26,8 +26,8 @@ let cvs;
 let cvs_x = 400;
 let cvs_y = 800;
 let grid = [];
-let peices = []
-let current_peice;
+let pieces = []
+let current_piece;
 let gameover;
 let score = 0;
 let lines = 0;
@@ -252,7 +252,7 @@ class Shapes {
   }
 
   place() {
-    // Give each peice a permenant spot on the grid
+    // Give each piece a permenant spot on the grid
     grid[this.sq1[0]][this.sq1[1]].occupied = true;
     grid[this.sq2[0]][this.sq2[1]].occupied = true;
     grid[this.sq3[0]][this.sq3[1]].occupied = true;
@@ -388,7 +388,7 @@ function new_game() {
 
 function move1() {
   // Drops each piece by one square after certain time delay
-  if(current_peice.bottom == true) {
+  if(current_piece.bottom == true) {
     new_piece();
     return;
   }
@@ -398,33 +398,41 @@ function move1() {
 }
 
 function move2() {
-  // After each delay, peice moves down, restarts loop by calling move1()
-  current_peice.down();
+  // After each delay, piece moves down, restarts loop by calling move1()
+  current_piece.down();
   move1();
 }
 
 function new_piece() {
+
   // if top of the grid is occupied gameover is true
-  for(let i = 0; i != 3; i++) {
-    if (grid[0][3 + i].occupied == true) {gameover = true;
-    document.getElementById('gameover').hidden = false;
-    }
-  }
+
 
   if (gameover == true) return;
 
 
   // Randomly chooses next piece
   let choice = randInt(0, 6);
-  if (choice == 0) current_peice = new Bar();
-  if (choice == 1) current_peice = new Cube();
-  if (choice == 2) current_peice = new J();
-  if (choice == 3) current_peice = new L();
-  if (choice == 4) current_peice = new T();
-  if (choice == 5) current_peice = new S();
-  if (choice == 6) current_peice = new Z();
+  if (choice == 0) current_piece = new Bar();
+  if (choice == 1) current_piece = new Cube();
+  if (choice == 2) current_piece = new J();
+  if (choice == 3) current_piece = new L();
+  if (choice == 4) current_piece = new T();
+  if (choice == 5) current_piece = new S();
+  if (choice == 6) current_piece = new Z();
 
-  current_peice.appear();
+  // Checks if any of the squares the new piece are occupied, and ends the game
+  let blocks = [current_piece.sq1, current_piece.sq2, current_piece.sq3, current_piece.sq4];
+  for(let i = 0; i != 4; i++) {
+
+    if (grid[blocks[i][0]][blocks[i][1]].occupied == true) {
+      gameover = true;
+    document.getElementById('gameover').hidden = false;
+    return;
+    }
+  }
+
+  current_piece.appear();
   move1();
 }
 
@@ -487,11 +495,11 @@ function line_check() {
 
 // ---------- Key functions --------------------------------------------------
 function left() {
-  current_peice.left();
+  current_piece.left();
 }
 
 function right() {
-  current_peice.right();
+  current_piece.right();
 }
 
 // --------------- Wack ---------------------------------
@@ -503,7 +511,7 @@ function randInt(min, max) {
 
 function kill() {
   gameover = true;
-  current_peice.bottom = true;
+  current_piece.bottom = true;
 }
 
 function new_grid() {
