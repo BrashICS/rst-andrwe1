@@ -482,7 +482,7 @@ function line_check() {
 
       lines += num_lines;
 
-      linestml.innerText = 'Lines:' + lines;
+      linestml.innerText = 'Lines: ' + lines;
     }
 
 
