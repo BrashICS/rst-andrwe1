@@ -224,7 +224,7 @@ class Shapes {
       blocks[x][0] *= - 1;
     }
 
-    // Remove the buffer to rotated points back on the grid
+    // adds buffer back to piece 
     for (let i = 0; i != 4; i++) {
       blocks[i][0] += y_buffer;
       blocks[i][1] += x_buffer;
@@ -242,7 +242,7 @@ class Shapes {
       }
   }
     this.dissapear();
-
+    // resets variables
     this.sq1 = blocks[0];
     this.sq2 = blocks[1];
     this.sq3 = blocks[2];
@@ -271,7 +271,8 @@ class Shapes {
 }
 
 // General names refer to what they look like and the actual names used in the tetris game
-// Each piece is refered to as a Tetromino, Hense the name of my game!
+// Each piece is refered to as a Tetromino, Hence the name of my game!
+// Each subclass consists of piece type and 4 points
 class Cube extends Shapes {
   type = 'cube'
   colour = yellow;
@@ -405,9 +406,6 @@ function move2() {
 
 function new_piece() {
 
-  // if top of the grid is occupied gameover is true
-
-
   if (gameover == true) return;
 
 
@@ -487,20 +485,11 @@ function line_check() {
         score += 800;
       }
 
+      // HTML thingy
       lines += num_lines;
 
       linestml.innerText = 'Lines: ' + lines;
     }
-
-
-// ---------- Key functions --------------------------------------------------
-function left() {
-  current_piece.left();
-}
-
-function right() {
-  current_piece.right();
-}
 
 // --------------- Wack ---------------------------------
 function randInt(min, max) {
@@ -510,11 +499,13 @@ function randInt(min, max) {
 }
 
 function kill() {
+  // stops the game
   gameover = true;
   current_piece.bottom = true;
 }
 
 function new_grid() {
+  // creates new grid
   for(let y = 0; y < 20; y++) {
     grid[y] = [];
     for (let x = 0; x < 10; x++) {
@@ -528,6 +519,7 @@ function new_grid() {
 }
 
 function instructions() {
+  // shows instructions from button
   let x = document.getElementById('instructions');
   if (x.hidden == true) {
     x.hidden = false;
